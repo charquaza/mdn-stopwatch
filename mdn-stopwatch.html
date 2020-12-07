@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang='en-US'>
+    <head>
+        <meta charset='utf-8'>
+        <title>JP MDN Stopwatch</title>
+        <style>
+            button {
+                font-weight: bold;
+                font-size: 100%;
+                text-align: right;
+            }
+            .stopwatch-container {
+                width: 300px;
+                height: 300px;
+                border-width: 3px;
+                border-style: solid;
+                border-color: black;
+            }
+            .stopwatch {
+                text-align: center;
+                font-weight: bold;
+                font-size: 150%;
+            }
+            .start {
+                background-color: greenyellow;
+            }
+            .stop {
+                background-color: red;
+            }
+            .reset {
+                background-color:seashell;
+            }
+        </style>
+    </head>
+
+    <body>
+        <h1></h1>
+        <h1>This is the Stopwatch</h1>
+        <div class='stopwatch-container'>
+            <p class='stopwatch'>0</p>
+            <button class='start'>Start</button>
+            <button class='stop'>Stop</button>
+            <button class='reset'>Reset</button>
+        </div>
+
+        <script>
+        (function theStopWatch() {
+                var watchDisplay = document.querySelector('.stopwatch');
+                var startBtn = document.querySelector('.start');
+                var stopBtn = document.querySelector('.stop');
+                var resetBtn = document.querySelector('.reset');
+
+                var watchID;
+                var previousTime = 0;
+
+                function startTheWatch() {
+                    var startTime = Date.now();
+                
+                    function runWatch() {
+                        var secondsElapsed = previousTime + Math.floor((Date.now() - startTime) / 1000);
+                        var hours = Math.floor(secondsElapsed / 3600);
+                        var minutes = Math.floor((secondsElapsed - hours * 3600) / 60);
+                        var seconds = secondsElapsed - hours * 3600 - minutes * 60;
+
+                        watchDisplay.innerHTML = `${hours}:${minutes}:${seconds}`;
+                    }
+
+                    watchID = setInterval(runWatch, 1);
+                    startBtn.disabled = true;
+                }
+
+                function stopTheWatch() {
+                    clearInterval(watchID);
+                    previousTime = parseInt(watchDisplay.innerHTML);
+                    startBtn.disabled = false;
+                }
+
+                function resetTheWatch() {
+                    stopTheWatch();
+                    previousTime = 0;
+                    watchDisplay.innerHTML = '0';
+                    startBtn.disabled = false;
+                }
+
+                startBtn.addEventListener('click', startTheWatch);
+                stopBtn.addEventListener('click', stopTheWatch);
+                resetBtn.addEventListener('click', resetTheWatch);
+        })();
+        </script>
+    </body>
+</html>
