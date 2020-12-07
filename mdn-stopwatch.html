@@ -37,7 +37,7 @@
         <h1></h1>
         <h1>This is the Stopwatch</h1>
         <div class='stopwatch-container'>
-            <p class='stopwatch'>0</p>
+            <p class='stopwatch'>00:00:00</p>
             <button class='start'>Start</button>
             <button class='stop'>Stop</button>
             <button class='reset'>Reset</button>
@@ -59,13 +59,17 @@
                     function runWatch() {
                         var secondsElapsed = previousTime + Math.floor((Date.now() - startTime) / 1000);
                         var hours = Math.floor(secondsElapsed / 3600);
-                        var minutes = Math.floor((secondsElapsed - hours * 3600) / 60);
-                        var seconds = secondsElapsed - hours * 3600 - minutes * 60;
+                        var minutes = Math.floor((secondsElapsed % 3600) / 60);
+                        var seconds = secondsElapsed % 60;
 
-                        watchDisplay.innerHTML = `${hours}:${minutes}:${seconds}`;
+                        var displayHours = (hours < 10) ? '0' + hours : hours;
+                        var displayMinutes = (minutes < 10) ? '0' + minutes : minutes;
+                        var displaySeconds = (seconds < 10) ? '0' + seconds : seconds;
+
+                        watchDisplay.innerHTML = `${displayHours}:${displayMinutes}:${displaySeconds}`;
                     }
 
-                    watchID = setInterval(runWatch, 1);
+                    watchID = setInterval(runWatch, 1000);
                     startBtn.disabled = true;
                 }
 
@@ -78,7 +82,7 @@
                 function resetTheWatch() {
                     stopTheWatch();
                     previousTime = 0;
-                    watchDisplay.innerHTML = '0';
+                    watchDisplay.innerHTML = '00:00:00';
                     startBtn.disabled = false;
                 }
 
